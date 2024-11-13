@@ -1,0 +1,23 @@
+get rid of any use of dot notation (account for quotation mark problems)
+
+make sure always copying complex objects when necessary
+
+have an explicit list and dict types (refactor code to use dict instead of object?)
+
+right now, eval of the string will not do things like get all the matching terms in array
+    consider adding this functionality
+    this should also apply to include clauses (consider need for .any(), .all(), .match(), etc)
+        need to be able to match multiple conditions to a single object in an array (but any of the objects)
+        but also match if some combination of the objects in the array meet the multiple conditions
+    consider using existing python eval syntax whenever possible
+
+think of other ways to deal with missing and null values
+
+consider cacheing values sometimes
+
+for UI, should be able to create arbitrary sequence of the main operation types 
+    these operations should appear as a sequence of aligned boxes
+    subquery boxes would be indented, subquery-subqueries would be double-indented, etc
+    
+
+
