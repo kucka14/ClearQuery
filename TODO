@@ -1,0 +1,24 @@
+eval_data_string either has an explicity return of string, or returns list
+    might not have to use isinstance to check for list, could return this or something
+
+the ordering of the ktv_tuples is approximation; consider ways to solve
+    cannot handle variables that first evaluate to something
+    what about keys that are not explicit? how does this work with grouping, etc?
+
+are there errors related to variable substitution that must be caught?
+
+make sure always copying complex objects when necessary
+
+think of other ways to deal with missing and null values
+
+currently, include clauses need to have ( and ) separated from surrounding by space, consider alternative
+
+consider caching values sometimes
+
+for UI, should be able to create arbitrary sequence of operations
+    these operations should appear as a stack of aligned boxes
+    subquery boxes would be indented, subquery-subqueries would be double-indented, etc
+
+    
+
+

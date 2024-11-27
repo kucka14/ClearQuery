@@ -32,11 +32,12 @@ create_collection_operation_2 = {
     'output_name': '',
     'input_collection': '',
     'include_clauses': (
-
+        (),
+        ()
     ),
     'ktv_table': (
-        ('', '', ''),
-        ('', '', '')
+        ('', '', '', True),
+        ('', '', '', False)
     ),
     'sort_by': (),
 
@@ -49,11 +50,12 @@ create_collection_operation_2 = {
             'iterates_over': '',
             'input_collection': '',
             'include_clauses': (
-
+                (),
+                ()
             ),
             'ktv_table': (
-                ('', '', ''),
-                ('', '', '')
+                ('', '', '', True),
+                ('', '', '', False)
             ),
             'sort_by': (),
             'group_by': {
