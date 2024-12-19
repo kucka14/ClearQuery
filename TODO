@@ -1,3 +1,6 @@
+look into how the below line is using object itself as the ktv_variables dict:
+    evaluate_include_clause(object, create_info['include_clauses'][1], object)
+
 eval_data_string either has an explicity return of string, or returns list
     might not have to use isinstance to check for list, could return this or something
 

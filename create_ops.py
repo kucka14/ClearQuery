@@ -1,5 +1,6 @@
 from copy import deepcopy
 import re
+from operator import itemgetter
 
 
 def create_execute_plan(ktv_table, input_collection):
@@ -198,20 +199,50 @@ def evaluate_include_clause(target_object, include_clause, ktv_variables):
     return eval(new_include_clause)
 
 
-def group_collection(collection, group_by):
+def group_collection(collection, group_by_dict):
 
+    grouper_columns = [key for key in group_by_dict if group_by_dict[key] == 'grouper']
+    aggregate_columns_dict = {}
+    for key in group_by_dict:
+        if group_by_dict[key] != 'grouper':
+            aggregate_columns_dict[key] = []
 
-    return collection, ktv_variables
+    groups = {}
+    for object in collection:
+        object_group_id = tuple([object[grouper_columns[i]] for i in range(len(grouper_columns))])
+        if object_group_id not in groups:
+            groups[object_group_id] = deepcopy(aggregate_columns_dict)
+        for column in groups[object_group_id]:
+            groups[object_group_id][column].append(object[column])
+    
+    new_collection = []
+    for groupers, aggregates in groups.items():
+        new_object = {}
+        for i in range(len(groupers)):
+            new_object[grouper_columns[i]] = groupers[i]
+        for column, values in aggregates.items():
 
+            if group_by_dict[column] == 'sum':
+                aggregated_values = sum(values)
+            elif group_by_dict[column] == 'count':
+                aggregated_values = len(values)
 
-def filter_after_grouping(collection, post_group_include_clauses, ktv_variables):
+            # add more aggregate functions if the above two are working
+
+            new_object[column] = aggregated_values
+
+    collection = new_collection
+
     return collection
 
 
+# sort_by is a list of couplets: [sort_column, ascending/descending]
 def sort_collection(collection, sort_by):
 
+    column_list, order_list = map(list, zip(*sort_by))
+    order_list = [True if item=='descending' else False for item in order_list]
 
-
+    sorted_collection = sorted(collection, key=itemgetter(*column_list), reverse=order_list)
 
     return collection
 
@@ -280,10 +311,15 @@ def create_collection(create_info, collections):
             if evaluate_include_clause(output_object, pre_group_include_clause, ktv_variables):
                 collection.append(output_object)
 
-    # need to create new ktv_varialbes
-    collection, ktv_variables = group_collection(collection, create_info['group_by'])
+    collection = group_collection(collection, create_info['group_by'])
 
-    collection = filter_after_grouping(collection, create_info['include_clauses'][1], ktv_variables)
+    # filter after grouping
+    filtered_collection = []
+    for object in collection:
+        # using the object itself as the ktv_variables dict
+        if evaluate_include_clause(object, create_info['include_clauses'][1], object):
+            filtered_collection.append(object)
+    collection = filtered_collection
 
     collection = sort_collection(collection, create_info['sort_by'])
 
